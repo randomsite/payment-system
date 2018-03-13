@@ -1,6 +1,6 @@
 # payment-system
 
-> VueVue projects payment system
+> Vue projects payment system
 
 ## Build Setup
 

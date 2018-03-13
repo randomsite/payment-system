@@ -1,67 +1,36 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-
 import Vue from 'vue'
 import VueFire from 'vuefire'
 import App from './App'
 import router from './router'
+import firebase from 'firebase'
 
-Vue.config.productionTip = false
-Vue.use(VueFire)
+Vue.config.productionTip = false;
+Vue.use(VueFire);
 
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
-});
+let app;
+let config = {
+    apiKey: "AIzaSyCfxWQvLTvZJna1o-7EOcFkymNUmmDd0AM",
+    authDomain: "rndm-pays.firebaseapp.com",
+    databaseURL: "https://rndm-pays.firebaseio.com",
+    projectId: "rndm-pays",
+    storageBucket: "",
+    messagingSenderId: "868857430754"
+};
 
-var current = null;
-document.querySelector('#email').addEventListener('focus', function(e) {
-    if (current) current.pause();
-    current = anime({
-        targets: 'path',
-        strokeDashoffset: {
-            value: 0,
-            duration: 700,
-            easing: 'easeOutQuart'
-        },
-        strokeDasharray: {
-            value: '240 1386',
-            duration: 700,
-            easing: 'easeOutQuart'
-        }
-    });
-});
-document.querySelector('#password').addEventListener('focus', function(e) {
-    if (current) current.pause();
-    current = anime({
-        targets: 'path',
-        strokeDashoffset: {
-            value: -336,
-            duration: 700,
-            easing: 'easeOutQuart'
-        },
-        strokeDasharray: {
-            value: '240 1386',
-            duration: 700,
-            easing: 'easeOutQuart'
-        }
-    });
-});
-document.querySelector('#submit').addEventListener('focus', function(e) {
-    if (current) current.pause();
-    current = anime({
-        targets: 'path',
-        strokeDashoffset: {
-            value: -730,
-            duration: 700,
-            easing: 'easeOutQuart'
-        },
-        strokeDasharray: {
-            value: '530 1386',
-            duration: 700,
-            easing: 'easeOutQuart'
-        }
-    });
+firebase.initializeApp(config)
+
+// Create a table in Firebase
+var projectsRef = firebase.database().ref('projects');
+export {projectsRef as db};
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (!app) {
+        /* eslint-disable no-new */
+        app = new Vue({
+            el: '#app',
+            template: '<App/>',
+            components: { App },
+            router
+        })
+    }
 });

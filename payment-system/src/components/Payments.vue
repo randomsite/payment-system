@@ -122,21 +122,8 @@
 
 <script>
     import firebase from 'firebase'
-
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyCfxWQvLTvZJna1o-7EOcFkymNUmmDd0AM",
-        authDomain: "rndm-pays.firebaseapp.com",
-        databaseURL: "https://rndm-pays.firebaseio.com",
-        projectId: "rndm-pays",
-        storageBucket: "",
-        messagingSenderId: "868857430754"
-    };
-
-    firebase.initializeApp(config);
-
-    // Create a table in Firebase
-    var projectsRef = firebase.database().ref('projects');
+    import VueFire from 'vuefire'
+    import {db} from '../main'
 
     export default {
         name: 'Payments',
@@ -146,11 +133,11 @@
             }
         },
         firebase: {
-            projects: projectsRef
+            projects: db
         },
         methods: {
             addProject: function (project) {
-                projectsRef.push({
+                db.push({
                     'completed': false,
                     'date_start': '',
                     'date_end': '',
@@ -163,7 +150,7 @@
                 });
             },
             saveProject: function (project, autosave) {
-                projectsRef.child(project['.key']).update({
+                db.child(project['.key']).update({
                     'date_start': project.date_start,
                     'date_end': project.date_end,
                     'site': project.site,
@@ -175,20 +162,20 @@
                 });
 
                 if (autosave) {
-                    projectsRef.child(project['.key']).update({is_edit: false});
+                    db.child(project['.key']).update({is_edit: false});
                 }
 
                 if (project.is_work && project.is_done && project.is_pay) {
-                    projectsRef.child(project['.key']).update({completed: true});
+                    db.child(project['.key']).update({completed: true});
                 } else {
-                    projectsRef.child(project['.key']).update({completed: false});
+                    db.child(project['.key']).update({completed: false});
                 }
             },
             editProject: function (project) {
-                projectsRef.child(project['.key']).update({is_edit: true});
+                db.child(project['.key']).update({is_edit: true});
             },
             removeProject: function (project) {
-                projectsRef.child(project['.key']).remove()
+                db.child(project['.key']).remove()
             },
             switchStatus: function (project, field_key) {
                 if (event.target.classList.contains('fas')) {

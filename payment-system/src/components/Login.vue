@@ -30,10 +30,10 @@
         </svg>
         <div class="login-form">
           <label for="email">Email</label>
-          <input type="email" id="email">
+          <input type="email" id="email" v-model="email">
           <label for="password">Password</label>
-          <input type="password" id="password">
-          <input type="submit" id="submit" value="Submit" v-on:click="login">
+          <input type="password" id="password" v-model="password">
+          <input type="submit" id="submit" value="Submit" v-on:click="signIn">
         </div>
       </div>
     </div>
@@ -41,17 +41,30 @@
 </template>
 
 <script>
-  export default {
-      name: 'login',
-      data: function () {
-          return {}
-      },
-      methods: {
-          login: function () {
-              this.$router.replace('Payments')
-          }
-      }
-  }
+    import firebase from 'firebase'
+    export default {
+        name: 'login',
+        data: function() {
+            return {
+                email: '',
+                password: ''
+            }
+        },
+        methods: {
+            signIn: function() {
+                console.log(this.email, this.password);
+                firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
+                    (user) => {
+//                        this.$router.replace('Payments')
+                    },
+                    (err) => {
+                        alert('Oops. ' + err.message)
+                    }
+                );
+            }
+        }
+    }
+
 </script>
 
 <style>
