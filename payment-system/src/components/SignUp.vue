@@ -1,9 +1,9 @@
 <template>
-  <div class="login-page">
+  <div class="sign-up-page">
     <div class="login-container">
       <div class="left">
-        <div class="login">Login</div>
-        <div class="eula">You don't have an account ? You can <router-link to="/sign-up">create one</router-link></div>
+        <div class="login">Sign Up</div>
+        <div class="eula"><span>or go back to <router-link to="/login">login</router-link>.</span></div>
       </div>
       <div class="right">
         <svg viewBox="0 0 320 300">
@@ -42,8 +42,9 @@
 
 <script>
     import firebase from 'firebase'
+
     export default {
-        name: 'login',
+        name: 'signUp',
         data: function() {
             return {
                 email: '',
@@ -51,9 +52,8 @@
             }
         },
         methods: {
-            signIn: function() {
-                console.log(this.email, this.password);
-                firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
+            signUp: function() {
+                firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
                     (user) => {
                         this.$router.replace('/')
                     },
@@ -64,7 +64,6 @@
             }
         }
     }
-
 </script>
 
 <style>

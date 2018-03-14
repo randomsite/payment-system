@@ -123,7 +123,9 @@
 <script>
     import firebase from 'firebase'
     import VueFire from 'vuefire'
-    import {db} from '../main'
+    import db from '../core/firebase.js'
+
+    let projectsRef = db.ref('projects')
 
     export default {
         name: 'Payments',
@@ -133,11 +135,11 @@
             }
         },
         firebase: {
-            projects: db
+            projects: projectsRef
         },
         methods: {
             addProject: function (project) {
-                db.push({
+                projectsRef.push({
                     'completed': false,
                     'date_start': '',
                     'date_end': '',
@@ -150,7 +152,7 @@
                 });
             },
             saveProject: function (project, autosave) {
-                db.child(project['.key']).update({
+                projectsRef.child(project['.key']).update({
                     'date_start': project.date_start,
                     'date_end': project.date_end,
                     'site': project.site,
@@ -162,20 +164,20 @@
                 });
 
                 if (autosave) {
-                    db.child(project['.key']).update({is_edit: false});
+                    projectsRef.child(project['.key']).update({is_edit: false});
                 }
 
                 if (project.is_work && project.is_done && project.is_pay) {
-                    db.child(project['.key']).update({completed: true});
+                    projectsRef.child(project['.key']).update({completed: true});
                 } else {
-                    db.child(project['.key']).update({completed: false});
+                    projectsRef.child(project['.key']).update({completed: false});
                 }
             },
             editProject: function (project) {
-                db.child(project['.key']).update({is_edit: true});
+                projectsRef.child(project['.key']).update({is_edit: true});
             },
             removeProject: function (project) {
-                db.child(project['.key']).remove()
+                projectsRef.child(project['.key']).remove()
             },
             switchStatus: function (project, field_key) {
                 if (event.target.classList.contains('fas')) {
